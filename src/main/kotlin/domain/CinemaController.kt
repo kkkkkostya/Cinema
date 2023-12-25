@@ -188,7 +188,9 @@ class CinemaControllerImp(
                 println("Неверно указано место")
                 return
             }
-            cinemaDao.markPlace(name, LocalDate.parse(date, formatter), num[0]?.minus(1), num[1]?.minus(1))
+            val res = cinemaDao.markPlace(name, LocalDate.parse(date, formatter), num[0]?.minus(1), num[1]?.minus(1))
+            if (res!="Success")
+                println("\nМесто с номером ${num[0]} ряд ${num[1]} свободно. Его нельзя отметить как занятое!\n")
         }
     }
 

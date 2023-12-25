@@ -24,7 +24,7 @@ interface CinemaDao {
     fun returnPlace(name: String?, date: LocalDate, a: Int?, b: Int?)
     fun seeSession(name: String, date: LocalDate): Array<Array<FreeSeat>>?
     fun modifyTimetable(name: String, date: LocalDate, newDate: LocalDate)
-    fun markPlace(name: String, date: LocalDate, a: Int?, b: Int?)
+    fun markPlace(name: String, date: LocalDate, a: Int?, b: Int?): String
 }
 
 class RuntimeCinemaDao : CinemaDao {
@@ -109,8 +109,11 @@ class RuntimeCinemaDao : CinemaDao {
         timeTableFile.save(timeTable)
     }
 
-    override fun markPlace(name: String, date: LocalDate, a: Int?, b: Int?) {
-        timeTable[name]?.markPlace(date, Pair(a, b))
+    override fun markPlace(name: String, date: LocalDate, a: Int?, b: Int?): String {
+        val res = timeTable[name]?.markPlace(date, Pair(a, b))
+        if (res is Error)
+            return res.outputModel.message
         timeTableFile.save(timeTable)
+        return "Success"
     }
 }

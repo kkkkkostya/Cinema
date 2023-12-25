@@ -1,5 +1,9 @@
 package domain.entity
 
+import OutputModel
+import domain.Error
+import domain.Success
+import domain.Result
 import java.time.LocalDate
 
 enum class FreeSeat {
@@ -20,8 +24,11 @@ class TimetableEntity(name: String) {
         return table[date]
     }
 
-    fun markPlace(date: LocalDate, place: Pair<Int?, Int?>) {
+    fun markPlace(date: LocalDate, place: Pair<Int?, Int?>): Result {
+        if (place.first?.let { place.second?.let { it1 -> table[date]?.get(it)?.get(it1) } } == FreeSeat.Free)
+            return Error(OutputModel("Place is free"))
         table[date]?.let { row -> row[place.first!!].let { col -> col[place.second!!] = FreeSeat.Marked } }
+        return Success
     }
 
     fun update(date: LocalDate, place: Pair<Int?, Int?>) {
